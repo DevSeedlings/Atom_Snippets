@@ -1,0 +1,428 @@
+# Your snippets
+#
+# Atom snippets allow you to enter a simple prefix in the editor and hit tab to
+# expand the prefix into a larger code block with templated values.
+#
+# You can create a new snippet in this file by typing "snip" and then hitting
+# tab.
+#
+# An example CoffeeScript snippet to expand log to console.log:
+#
+# '.source.coffee':
+#   'Console log':
+#     'prefix': 'log'
+#     'body': 'console.log $1'
+#
+# Each scope (e.g. '.source.coffee' above) can only be declared once.
+#
+# This file uses CoffeeScript Object Notation (CSON).
+# If you are unfamiliar with CSON, you can read more about it in the
+# Atom Flight Manual:
+# https://atom.io/docs/latest/using-atom-basic-customization#cson
+'.source.js':
+
+  'app':
+    'prefix': 'app'
+    'body': """
+            var app = angular.module("${1:app}", [$2]);
+            """
+
+
+
+  'controller':
+    'prefix': 'ctrl'
+    'body': """
+            angular.module("${1:app}").controller("${2:main}Ctrl", function($scope) {
+              $3
+            });
+            """
+
+
+
+  'service':
+    'prefix': 'serv'
+    'body': """
+            angular.module("${1:app}").service("${2:collection}Service", function($http) {
+
+              this.get${3:Collection}s = function() {
+                return $http({
+                  method: 'GET',
+                  url: '/${4:collection}'
+                }).then(function(response) {
+                  return response;
+                });
+              };
+
+              this.get${3:Collection} = function(id) {
+                return $http({
+                  method: 'GET',
+                  url: '/${4:collection}?_id=' + id
+                }).then(function(response) {
+                  return response;
+                });
+              };
+
+              this.create${3:Collection} = function(${5:collection}) {
+                return $http({
+                  method: 'POST',
+                  url: '/${4:collection}',
+                  data: ${5:collection}
+                }).then(function(response) {
+                  return response;
+                });
+              };
+
+              this.edit${3:Collection} = function(id, ${5:collection}) {
+                return $http({
+                  method: 'PUT',
+                  url: "/${4:collection}/" + id,
+                  data: ${5:collection}
+                }).then(function(response) {
+                  return response;
+                });
+              };
+
+              this.delete${3:Collection} = function(id) {
+                return $http({
+                  method: 'DELETE',
+                  url: '/${4:collection}/' + id
+                }).then(function(response) {
+                  return response;
+                });
+              };
+            });
+            """
+
+
+
+  'route/s config':
+    'prefix': 'config'
+    'body': """
+              angular.module("${1:app}").config(function($stateProvider, $urlRouterProvider) {
+                $stateProvider
+                  .state('$3', {
+                    url: '/${4:$3}',
+                    templateUrl: './../features/${5:$3}/${6:$3}.template.html',
+                    controller: '${7:$3}Ctrl'
+                  })${8:;}
+                  $9
+                  $urlRouterProvider.otherwise('/${2:home}');
+              });
+            """
+
+
+
+  'state':
+    'prefix': '.state'
+    'body': """
+            ${1:,}
+​
+            .state('$2', {
+              url: '/${3:$2}',
+              templateUrl: './../features/${4:$2}/${5:$2}.template.html',
+              controller: '${6:$2}Ctrl'
+            })${7:;}
+            $8
+            """
+
+
+
+  'console.log':
+    'prefix': 'con'
+    'body': """
+            console.log($1);
+            """
+
+
+
+  '.then':
+    'prefix': '.then'
+    'body': """
+            .then(function(response) {
+              $1
+            });
+            """
+
+
+
+  '.catch':
+    'prefix': '.catch'
+    'body': """
+            .catch(function(err) {
+              $1
+            });
+            """
+
+
+
+  'Server':
+    'prefix': 'server'
+    'body': """
+            // Require dependencies
+            var express = require('express');
+            var cors = require('cors');
+            var bodyParser = require('body-parser');
+            var mongoose = require('mongoose');
+
+            // Controllers
+            var ${1:model}Ctrl = require('./controllers/${1:model}Ctrl');
+
+            // initilize app
+            var app = express();
+
+            // initilize dependencies
+            app.use(cors());
+            app.use(bodyParser.json());
+
+            // Endpoints
+            app.get('/${1:model}', ${1:model}Ctrl.read);
+            app.post('/${1:model}', ${1:model}Ctrl.create);
+            app.put('/${1:model}/:id', ${1:model}Ctrl.update);
+            app.delete('/${1:model}/:id', ${1:model}Ctrl.delete);
+
+            // Variables
+            var port = ${2:3000};
+            var mongoURI = 'mongodb://localhost:27017/${3:DBName}';
+
+            // MongoDB connection
+            mongoose.set('debug', true);
+            mongoose.connect(mongoURI);
+            mongoose.connection.once('open', function() {
+              console.log('Connected to mongo at: ', mongoURI);
+            });
+
+            // App Listen
+            app.listen(port, function() {
+              console.log('listening on port ', port);
+            });
+            """
+
+
+
+  'Endpoints':
+    'prefix': 'end'
+    'body': """
+            app.get('/${1:model}', ${2:model}Ctrl.read);
+            app.post('/${1:model}', ${2:model}Ctrl.create);
+            app.put('/${1:model}/:id', ${2:model}Ctrl.update);
+            app.delete('/${1:model}/:id', ${2:model}Ctrl.delete);
+            """
+
+
+
+  'Server Controller':
+    'prefix': 'sctrl'
+    'body': """
+            // Require Model
+            var ${1:Model} = require('./../models/${1:Model}');
+
+            // Export Methods
+            module.exports = {
+              read: function(req, res) {
+                ${1:Model}.find(req.query, function(err, ${2:result}) {
+                  if (err) {
+                    res.status(500).send(err);
+                  }
+                  res.status(200).send(${2:result});
+                });
+              },
+
+              create: function(req, res) {
+                ${1:Model}.create(req.body, function(err, ${2:result}) {
+                  if (err) {
+                    res.status(500).send(err);
+                  }
+                  res.status(200).send(${2:result});
+                });
+              },
+
+              update: function(req, res) {
+                ${1:Model}.findByIdAndUpdate(req.params.id, req.body, function(err, ${2:result}) {
+                  if (err) {
+                    res.status(500).send(err);
+                  }
+                  res.status(200).send(${2:result});
+                });
+              },
+
+              delete: function(req, res) {
+                ${1:Model}.findByIdAndRemove(req.params.id, function(err, ${2:result}) {
+                  if (err) {
+                    res.status(500).send(err);
+                  }
+                  res.status(200).send(${2:result});
+                });
+              }
+            };
+            """
+
+
+
+  'Schema':
+    'prefix': 'schema'
+    'body': """
+            // require mongoose
+            var mongoose = require('mongoose');
+
+            // Define Message
+            var ${1:model}Schema = mongoose.Schema({
+              $3
+            });
+
+            // Export Schema
+            module.exports = mongoose.model('${2:Model}', ${1:model}Schema);
+            """
+
+
+
+  'React':
+    'prefix': 'react'
+    'body': """
+            import React, {Component} from 'react';
+
+            export default class App extends Component {
+
+              constructor(props){
+                super(props);
+
+                this.state = {};
+              }
+
+              render() {
+                return(
+                  <div>
+
+                  </div>
+                );
+              }
+
+            }
+            """
+
+
+
+  'Div':
+    'prefix': 'div'
+    'body': """
+            <div className="$1">
+              $2
+            </div>
+            """
+
+
+
+  'Input':
+    'prefix': 'input'
+    'body': """
+            <input className="$1" type="${2:text}" placeholder="$3" onChange={ (event) => this.${1:functionName}(event.target.value)} />
+            $4
+            """
+
+
+
+  'Button':
+    'prefix': 'button'
+    'body': """
+            <button className="$1" type="button" onClick={}>$2</button>
+            $3
+            """
+
+
+
+  'Header':
+    'prefix': 'h1'
+    'body': """
+            <h${1:1} className="$2">$3</h${1:1}>
+            $4
+            """
+
+
+
+  'Link':
+    'prefix': 'a'
+    'body': """
+            <a href="$1">$2</a>
+            $3
+            """
+
+
+
+  'Image':
+    'prefix': 'img'
+    'body': """
+            <img src="$1">$2</img>
+            $3
+            """
+
+
+
+  'Peragraph':
+    'prefix': 'p'
+    'body': """
+            <p className="$1">$2</p>
+            $3
+            """
+
+
+
+  'Select':
+    'prefix': 'select'
+    'body': """
+            <select onChange={ (event) => this.${1:functionName}(event.target.value)}>
+              <option value="$2">$3</option>
+            </select>
+            $4
+            """
+
+
+
+'.text.html, .text.html .meta.scope.between-tag-pair, .text.html .punctuation.tag.begin':
+
+
+  'ng-view':
+    'prefix': 'ng-view'
+    'body': """
+            <ng-view></ng-view>
+            """
+
+
+
+  'modal template':
+    'prefix': 'modal'
+    'body': """
+            <div class="overlay"></div>
+            <div class="fade" ${1:ng-click="close()"}></div>
+            """
+
+
+
+'.source.css':
+  'modal classes':
+    'prefix': 'modal'
+    'body': """
+            .overlay {
+              color: black;
+              position: fixed;
+              left: 25%;
+              top: 20%;
+              padding: 25px;
+              border: 2px solid black;
+              background-color: #ffffff;
+              z-index: 100;
+              overflow: auto;
+              border-radius: 2px;
+              border: 1px solid #C0C3C5;
+            }
+            .fade {
+              position: fixed;
+              left: 0%;
+              top: 0%;
+              background-color: black;
+              -moz-opacity: 0.7;
+              opacity: .70;
+              filter: alpha(opacity=70);
+              width: 100%;
+              height: 100%;
+              z-index: 90;
+            }
+            """
