@@ -113,7 +113,7 @@
 
 
   'state':
-    'prefix': '.state'
+    'prefix': 'state'
     'body': """
             ${1:,}
 ​
@@ -136,7 +136,7 @@
 
 
   '.then':
-    'prefix': '.then'
+    'prefix': 'then'
     'body': """
             .then(function(response) {
               $1
@@ -146,7 +146,7 @@
 
 
   '.catch':
-    'prefix': '.catch'
+    'prefix': 'catch'
     'body': """
             .catch(function(err) {
               $1
