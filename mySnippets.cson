@@ -95,6 +95,63 @@
 
 
 
+  'authService':
+    'prefix': 'aServ'
+    'body': """
+            angular.module("${1:app}").service("authService", function($http) {
+
+              this.login = function(user) {
+                return $http({
+                  method: 'post',
+                  url: '/login',
+                  data: user
+                }).then(function(response) {
+                  return response;
+                });
+              };
+
+              this.logout = function() {
+                return $http({
+                  method: 'get',
+                  url: '/logout'
+                }).then(function(response) {
+                  return response;
+                });
+              };
+
+              this.getCurrentUser = function() {
+                return $http({
+                  method: 'GET',
+                  url: '/me'
+                }).then(function(response) {
+                  return response;
+                });
+              };
+
+              this.registerUser = function(user) {
+                return $http({
+                  method: 'POST',
+                  url: '/register',
+                  data: user
+                }).then(function(response) {
+                  return response;
+                });
+              };
+
+              this.editUser = function(id, user) {
+                return $http({
+                  method: 'PUT',
+                  url: "/user/" + id,
+                  data: user
+                }).then(function(response) {
+                  return response;
+                });
+              };
+            });
+            """
+
+
+
   'route/s config':
     'prefix': 'config'
     'body': """
@@ -102,7 +159,7 @@
                 $stateProvider
                   .state('$3', {
                     url: '/${4:$3}',
-                    templateUrl: './../features/${5:$3}/${6:$3}.template.html',
+                    templateUrl: './app/routes/${5:$3}/${6:$3}Tmpl.html',
                     controller: '${7:$3}Ctrl'
                   })${8:;}
                   $9
@@ -113,16 +170,28 @@
 
 
   'state':
-    'prefix': '.state'
+    'prefix': 'state'
     'body': """
-            ${1:,}
-​
-            .state('$2', {
-              url: '/${3:$2}',
-              templateUrl: './../features/${4:$2}/${5:$2}.template.html',
-              controller: '${6:$2}Ctrl'
-            })${7:;}
-            $8
+            .state('$1', {
+              url: '/${2:$1}',
+              templateUrl: './app/routes/${3:$1}/${4:$1}Tmpl.html',
+              controller: '${5:$1}Ctrl'
+            })${6:;}
+            $7
+            """
+
+
+
+  'state':
+    'prefix': 'state'
+    'body': """
+            angular.module('${1:app}').directive('${2:some}Dir', function() {
+              return {
+                restrict: '${3:EA}',
+                templateUrl: './app/directives/${4:${2:some}}/${5:${2:some}}Tmpl.html',
+                controller: '${6:${2:some}}Ctrl'
+              };
+            });
             """
 
 
@@ -136,7 +205,7 @@
 
 
   '.then':
-    'prefix': '.then'
+    'prefix': 'then'
     'body': """
             .then(function(response) {
               $1
@@ -146,7 +215,7 @@
 
 
   '.catch':
-    'prefix': '.catch'
+    'prefix': 'catch'
     'body': """
             .catch(function(err) {
               $1
