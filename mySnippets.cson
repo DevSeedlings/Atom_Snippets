@@ -182,8 +182,8 @@
 
 
 
-  'state':
-    'prefix': 'state'
+  'Directive':
+    'prefix': 'dir'
     'body': """
             angular.module('${1:app}').directive('${2:some}Dir', function() {
               return {
