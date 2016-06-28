@@ -19,11 +19,25 @@
 # If you are unfamiliar with CSON, you can read more about it in the
 # Atom Flight Manual:
 # https://atom.io/docs/latest/using-atom-basic-customization#cson
+
+# JAVASCRIPT SNIPPETS
+# ============================================================
 '.source.js':
 
+  # ATOM PLUGIN SNIPPETS
+  # ============================================================
+  "editor-fold":
+    "prefix": "// e"
+    "body": "// <editor-fold desc='$1'>\n// </editor-fold>"
+
+
+  # ANGULAR SNIPPETS
+  # ============================================================
   'app':
     'prefix': 'app'
     'body': """
+            // INITILIZE APP
+            // ============================================================
             var app = angular.module("${1:app}", [$2]);
             """
 
@@ -32,8 +46,18 @@
   'controller':
     'prefix': 'ctrl'
     'body': """
+            // INITILIZE CONTROLLER
+            // ============================================================
             angular.module("${1:app}").controller("${2:main}Ctrl", function($scope) {
+
+              // VARIABLES
+              // ============================================================
               $3
+
+              // FUNCTIONS
+              // ============================================================
+
+
             });
             """
 
@@ -42,26 +66,23 @@
   'service':
     'prefix': 'serv'
     'body': """
+            // INITILIZE SERVICE
+            // ============================================================
             angular.module("${1:app}").service("${2:collection}Service", function($http) {
 
-              this.get${3:Collection}s = function() {
-                return $http({
-                  method: 'GET',
-                  url: '/${4:collection}'
-                }).then(function(response) {
-                  return response;
-                });
-              };
-
+              // CRUD FUNCTIONS
+              // ============================================================
               this.get${3:Collection} = function(id) {
+                var query = "";
+                if (id) query = '?_id=' + id;
                 return $http({
                   method: 'GET',
-                  url: '/${4:collection}?_id=' + id
+                  url: '/${4:collection}' + query
                 }).then(function(response) {
-                  return response;
+                  if (response.data.length < 2) return response.data[0];
+                  return response.data;
                 });
               };
-
               this.create${3:Collection} = function(${5:collection}) {
                 return $http({
                   method: 'POST',
@@ -71,7 +92,6 @@
                   return response;
                 });
               };
-
               this.edit${3:Collection} = function(id, ${5:collection}) {
                 return $http({
                   method: 'PUT',
@@ -81,7 +101,6 @@
                   return response;
                 });
               };
-
               this.delete${3:Collection} = function(id) {
                 return $http({
                   method: 'DELETE',
@@ -90,16 +109,25 @@
                   return response;
                 });
               };
+
+              // OTHER FUNCTIONS
+              // ============================================================
+
+
             });
             """
 
 
 
   'authService':
-    'prefix': 'aServ'
+    'prefix': 'authServ'
     'body': """
+            // INITILIZE SERVICE
+            // ============================================================
             angular.module("${1:app}").service("authService", function($http) {
 
+              // AUTH FUNCTIONS
+              // ============================================================
               this.login = function(user) {
                 return $http({
                   method: 'post',
@@ -109,7 +137,6 @@
                   return response;
                 });
               };
-
               this.logout = function() {
                 return $http({
                   method: 'get',
@@ -118,7 +145,6 @@
                   return response;
                 });
               };
-
               this.getCurrentUser = function() {
                 return $http({
                   method: 'GET',
@@ -127,7 +153,6 @@
                   return response;
                 });
               };
-
               this.registerUser = function(user) {
                 return $http({
                   method: 'POST',
@@ -137,7 +162,6 @@
                   return response;
                 });
               };
-
               this.editUser = function(id, user) {
                 return $http({
                   method: 'PUT',
@@ -147,6 +171,11 @@
                   return response;
                 });
               };
+
+              // OTHER FUNCTIONS
+              // ============================================================
+
+
             });
             """
 
@@ -155,15 +184,25 @@
   'route/s config':
     'prefix': 'config'
     'body': """
-              angular.module("${1:app}").config(function($stateProvider, $urlRouterProvider) {
+              // CONFIG
+              // ============================================================
+              app.config(function($stateProvider, $urlRouterProvider) {
+
+                // INITILIZE STATES
+                // ============================================================
                 $stateProvider
-                  .state('$3', {
-                    url: '/${4:$3}',
-                    templateUrl: './app/routes/${5:$3}/${6:$3}Tmpl.html',
-                    controller: '${7:$3}Ctrl'
-                  })${8:;}
-                  $9
-                  $urlRouterProvider.otherwise('/${2:home}');
+
+                  // ${1:HOME} STATE
+                  .state('${2:home}', {
+                    url: '/${3:${2:home}}',
+                    templateUrl: './app/routes/${4:${2:home}}/${5:${2:home}}Tmpl.html',
+                    controller: '${6:${2:home}}Ctrl'
+                  })${7:;}
+                  $8
+
+                // ASSIGN OTHERWISE
+                // ============================================================
+                $urlRouterProvider.otherwise('/${2:home}');
               });
             """
 
@@ -172,19 +211,23 @@
   'state':
     'prefix': 'state'
     'body': """
-            .state('$1', {
-              url: '/${2:$1}',
-              templateUrl: './app/routes/${3:$1}/${4:$1}Tmpl.html',
-              controller: '${5:$1}Ctrl'
-            })${6:;}
-            $7
+
+            // ${1:HOME} STATE
+            .state('${2:home}', {
+              url: '/${3:${2:home}}',
+              templateUrl: './app/routes/${4:${2:home}}/${5:${2:home}}Tmpl.html',
+              controller: '${6:${2:home}}Ctrl'
+            })${7:;}
+            $8
             """
 
 
 
-  'Directive':
+  'directive':
     'prefix': 'dir'
     'body': """
+            // INITILIZE DIRECTIVE
+            // ============================================================
             angular.module('${1:app}').directive('${2:some}Dir', function() {
               return {
                 restrict: '${3:EA}',
@@ -227,40 +270,49 @@
   'Server':
     'prefix': 'server'
     'body': """
-            // Require dependencies
+            // REQUIRE DEPENDENCIES
+            // ============================================================
             var express = require('express');
             var cors = require('cors');
             var bodyParser = require('body-parser');
             var mongoose = require('mongoose');
 
-            // Controllers
+            // CONTROLLERS
+            // ============================================================
             var ${1:model}Ctrl = require('./controllers/${1:model}Ctrl');
 
-            // initilize app
+            // INITILIZE APP
+            // ============================================================
             var app = express();
 
-            // initilize dependencies
+            // INITILIZE DEPENDENCIES
+            // ============================================================
             app.use(cors());
             app.use(bodyParser.json());
 
-            // Endpoints
-            app.get('/${1:model}', ${1:model}Ctrl.read);
-            app.post('/${1:model}', ${1:model}Ctrl.create);
-            app.put('/${1:model}/:id', ${1:model}Ctrl.update);
-            app.delete('/${1:model}/:id', ${1:model}Ctrl.delete);
+            // ENDPOINTS
+            // ============================================================
+            // ${2:MODEL} ENDPOINTS
+            app.get('/${3:model}', ${1:model}Ctrl.read);
+            app.post('/${3:model}', ${1:model}Ctrl.create);
+            app.put('/${3:model}/:id', ${1:model}Ctrl.update);
+            app.delete('/${3:model}/:id', ${1:model}Ctrl.delete);
 
-            // Variables
-            var port = ${2:3000};
+            // VARIABLES
+            // ============================================================
+            var port = ${4:3000};
             var mongoURI = 'mongodb://localhost:27017/${3:DBName}';
 
-            // MongoDB connection
+            // MONGO CONNECTION
+            // ============================================================
             mongoose.set('debug', true);
             mongoose.connect(mongoURI);
             mongoose.connection.once('open', function() {
               console.log('Connected to mongo at: ', mongoURI);
             });
 
-            // App Listen
+            // LISTEN
+            // ============================================================
             app.listen(port, function() {
               console.log('listening on port ', port);
             });
@@ -271,10 +323,11 @@
   'Endpoints':
     'prefix': 'end'
     'body': """
-            app.get('/${1:model}', ${2:model}Ctrl.read);
-            app.post('/${1:model}', ${2:model}Ctrl.create);
-            app.put('/${1:model}/:id', ${2:model}Ctrl.update);
-            app.delete('/${1:model}/:id', ${2:model}Ctrl.delete);
+            // ${1:MODEL} ENDPOINTS
+            app.get('/${2:model}', ${3:model}Ctrl.read);
+            app.post('/${2:model}', ${3:model}Ctrl.create);
+            app.put('/${2:model}/:id', ${3:model}Ctrl.update);
+            app.delete('/${2:model}/:id', ${3:model}Ctrl.delete);
             """
 
 
@@ -282,11 +335,16 @@
   'Server Controller':
     'prefix': 'sctrl'
     'body': """
-            // Require Model
+            // REQUIRE DEPENDENCIES
+            // ============================================================
             var ${1:Model} = require('./../models/${1:Model}');
 
-            // Export Methods
+            // EXPORT METHODS
+            // ============================================================
             module.exports = {
+
+              // CRUD METHODS
+              // ============================================================
               read: function(req, res) {
                 ${1:Model}.find(req.query, function(err, ${2:result}) {
                   if (err) {
@@ -295,7 +353,6 @@
                   res.status(200).send(${2:result});
                 });
               },
-
               create: function(req, res) {
                 ${1:Model}.create(req.body, function(err, ${2:result}) {
                   if (err) {
@@ -304,7 +361,6 @@
                   res.status(200).send(${2:result});
                 });
               },
-
               update: function(req, res) {
                 ${1:Model}.findByIdAndUpdate(req.params.id, req.body, function(err, ${2:result}) {
                   if (err) {
@@ -313,7 +369,6 @@
                   res.status(200).send(${2:result});
                 });
               },
-
               delete: function(req, res) {
                 ${1:Model}.findByIdAndRemove(req.params.id, function(err, ${2:result}) {
                   if (err) {
@@ -322,6 +377,11 @@
                   res.status(200).send(${2:result});
                 });
               }
+
+              // OTHER METHODS
+              // ============================================================
+
+
             };
             """
 
@@ -330,41 +390,39 @@
   'Schema':
     'prefix': 'schema'
     'body': """
-            // require mongoose
+            // REQUIRE DEPENDENCIES
+            // ============================================================
             var mongoose = require('mongoose');
 
-            // Define Message
+            // DEFINE SCHEMA
+            // ============================================================
             var ${1:model}Schema = mongoose.Schema({
               $3
             });
 
-            // Export Schema
+            // EXPORT SCHEMA
+            // ============================================================
             module.exports = mongoose.model('${2:Model}', ${1:model}Schema);
             """
 
 
-
+  # REACT SNIPPETS
+  # ============================================================
   'React':
     'prefix': 'react'
     'body': """
             import React, {Component} from 'react';
-
             export default class App extends Component {
-
               constructor(props){
                 super(props);
-
                 this.state = {};
               }
-
               render() {
                 return(
                   <div>
-
                   </div>
                 );
               }
-
             }
             """
 
@@ -444,13 +502,78 @@
             """
 
 
+  # GULP SNIPPET
+  # ============================================================
+  'gulpfile':
+    'prefix': 'gulp'
+    'body': """
+            // REQUIRE DEPENDENCIES
+            // ============================================================
+            var gulp = require('gulp');
+            var concat = require('gulp-concat');
+            var annotate = require('gulp-ng-annotate');
+            var uglify = require('gulp-uglify');
+            var watch = require('gulp-watch');
+            var sass = require('gulp-sass');
+            //var less = require('gulp-less'); //Uncomment if using Less
+            var babel = require('gulp-babel');
 
+            // DECLARE FILE PATHS
+            // ============================================================
+            var paths = {
+              jsSource: ['./public/app/**/*.js', '!/public/bundle.js'],
+              sassSource: ['./public/styles/**/*.sass'], // Add to array or change current path to './public/styles/**/*.scss' to use Scss
+              //lessSource: ['./public/styles/**/*.less'] //Uncomment if using Less
+            };
+
+            // DEFINE TASKS
+            // ============================================================
+            gulp.task('js', function() {
+              return gulp.src(paths.jsSource)
+              //.pipe(babel()) //Uncomment if using ES6
+              .pipe(concat('bundle.js'))
+              .pipe(annotate())
+              //.pipe(uglify()) //Uncomment when code is production ready
+              .pipe(gulp.dest('./public'));
+            });
+
+            gulp.task('sass', function () {
+              return gulp.src(paths.sassSource)
+                .pipe(sass())
+                .pipe(concat('style.css'))
+                .pipe(gulp.dest('./public'));
+            });
+
+            // gulp.task('less', function () {       // Uncomment if using Less
+            //   return gulp.src(paths.lessSource)
+            //     .pipe(less())
+            //     .pipe(concat('style.css'))
+            //     .pipe(gulp.dest('./public'));
+            // });
+
+            // WATCH TASKS
+            // ============================================================
+            gulp.task('watch', function() {
+              gulp.watch(paths.jsSource, ['js']);
+              gulp.watch(paths.sassSource, ['sass']);
+            //   gulp.watch(paths.sassSource, ['sass']); //Uncomment if using Less
+            });
+
+            // RUN DEFAULT TASK - first thing to run when gulp is called
+            // ============================================================
+            gulp.task('default', ['watch', 'js', 'sass']); //Add 'sass' to array if using sass and less or replace 'sass' with 'less' if only using Less
+            """
+
+
+# HTML SNIPPETS
+# ============================================================
 '.text.html, .text.html .meta.scope.between-tag-pair, .text.html .punctuation.tag.begin':
 
 
   'ng-view':
     'prefix': 'ng-view'
     'body': """
+            <!-- VIEW -->
             <ng-view></ng-view>
             """
 
@@ -459,29 +582,38 @@
   'modal template':
     'prefix': 'modal'
     'body': """
-            <div class="overlay"></div>
+            <!-- MODAL TEMPLATE -->
+            <div class="overlay">
+
+            </div>
             <div class="fade" ${1:ng-click="close()"}></div>
             """
 
 
-
+# CSS SNIPPETS
+# ============================================================
 '.source.css':
   'modal classes':
     'prefix': 'modal'
     'body': """
+            // MODAL OVERLAY
+            // ============================================================
             .overlay {
               color: black;
-              position: fixed;
-              left: 25%;
-              top: 20%;
+              position: fixed
+              top: 50%
+              left: 50%
+              transform: translate(-50%, -50%)
               padding: 25px;
-              border: 2px solid black;
               background-color: #ffffff;
               z-index: 100;
               overflow: auto;
-              border-radius: 2px;
+              border-radius: 3px;
               border: 1px solid #C0C3C5;
             }
+
+            // MODAL FADE
+            // ============================================================
             .fade {
               position: fixed;
               left: 0%;
@@ -492,6 +624,6 @@
               filter: alpha(opacity=70);
               width: 100%;
               height: 100%;
-              z-index: 90;
+              z-index: 99;
             }
             """
