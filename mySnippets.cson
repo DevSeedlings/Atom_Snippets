@@ -39,6 +39,8 @@
             // INITILIZE APP
             // ============================================================
             var app = angular.module("${1:app}", [$2]);
+
+            $3
             """
 
 
@@ -48,11 +50,11 @@
     'body': """
             // INITILIZE CONTROLLER
             // ============================================================
-            angular.module("${1:app}").controller("${2:main}Ctrl", function($scope) {
+            ${2:angular.module("${1:app}")}.controller("${3:main}Ctrl", function($scope) {
 
               // VARIABLES
               // ============================================================
-              $3
+              $4
 
               // FUNCTIONS
               // ============================================================
@@ -68,43 +70,43 @@
     'body': """
             // INITILIZE SERVICE
             // ============================================================
-            angular.module("${1:app}").service("${2:collection}Service", function($http) {
+            ${2:angular.module("${1:app}")}.service("${3:collection}Service", function($http) {
 
               // CRUD FUNCTIONS
               // ============================================================
-              this.get${3:Collection} = function(id) {
+              this.get${4:Collection} = function(id) {
                 var query = "";
                 if (id) query = '?_id=' + id;
                 return $http({
                   method: 'GET',
-                  url: '/${4:collection}' + query
+                  url: '/${5:collection}' + query
                 }).then(function(response) {
                   if (response.data.length < 2) return response.data[0];
                   return response.data;
                 });
               };
-              this.create${3:Collection} = function(${5:collection}) {
+              this.create${4:Collection} = function(${6:collection}) {
                 return $http({
                   method: 'POST',
-                  url: '/${4:collection}',
-                  data: ${5:collection}
+                  url: '/${5:collection}',
+                  data: ${6:collection}
                 }).then(function(response) {
                   return response;
                 });
               };
-              this.edit${3:Collection} = function(id, ${5:collection}) {
+              this.edit${4:Collection} = function(id, ${6:collection}) {
                 return $http({
                   method: 'PUT',
-                  url: "/${4:collection}/" + id,
-                  data: ${5:collection}
+                  url: "/${5:collection}/" + id,
+                  data: ${6:collection}
                 }).then(function(response) {
                   return response;
                 });
               };
-              this.delete${3:Collection} = function(id) {
+              this.delete${4:Collection} = function(id) {
                 return $http({
                   method: 'DELETE',
-                  url: '/${4:collection}/' + id
+                  url: '/${5:collection}/' + id
                 }).then(function(response) {
                   return response;
                 });
@@ -112,7 +114,7 @@
 
               // OTHER FUNCTIONS
               // ============================================================
-
+              $7
 
             });
             """
@@ -124,7 +126,7 @@
     'body': """
             // INITILIZE SERVICE
             // ============================================================
-            angular.module("${1:app}").service("authService", function($http) {
+            ${2:angular.module("${1:app}")}.service("authService", function($http) {
 
               // AUTH FUNCTIONS
               // ============================================================
@@ -174,7 +176,7 @@
 
               // OTHER FUNCTIONS
               // ============================================================
-
+              $3
 
             });
             """
@@ -186,23 +188,23 @@
     'body': """
               // CONFIG
               // ============================================================
-              app.config(function($stateProvider, $urlRouterProvider) {
+              ${2:angular.module("${1:app}")}.config(function($stateProvider, $urlRouterProvider) {
 
                 // INITILIZE STATES
                 // ============================================================
                 $stateProvider
 
-                  // ${1:HOME} STATE
-                  .state('${2:home}', {
-                    url: '/${3:${2:home}}',
-                    templateUrl: './app/routes/${4:${2:home}}/${5:${2:home}}Tmpl.html',
-                    controller: '${6:${2:home}}Ctrl'
-                  })${7:;}
-                  $8
+                  // ${3:HOME} STATE
+                  .state('${4:home}', {
+                    url: '/${5:${4:home}}',
+                    templateUrl: './app/routes/${6:${4:home}}/${7:${4:home}}Tmpl.html',
+                    controller: '${8:${4:home}}Ctrl'
+                  })${9:;}
+                  $10
 
                 // ASSIGN OTHERWISE
                 // ============================================================
-                $urlRouterProvider.otherwise('/${2:home}');
+                $urlRouterProvider.otherwise('/${4:home}');
               });
             """
 
@@ -228,13 +230,14 @@
     'body': """
             // INITILIZE DIRECTIVE
             // ============================================================
-            angular.module('${1:app}').directive('${2:some}Dir', function() {
+            ${2:angular.module("${1:app}")}.directive('${3:some}Dir', function() {
               return {
-                restrict: '${3:EA}',
-                templateUrl: './app/directives/${4:${2:some}}/${5:${2:some}}Tmpl.html',
-                controller: '${6:${2:some}}Ctrl'
+                restrict: '${4:EA}',
+                templateUrl: './app/directives/${5:${3:some}}/${6:${3:some}}Tmpl.html',
+                controller: '${7:${3:some}}Ctrl'
               };
             });
+            $8
             """
 
 
@@ -243,6 +246,7 @@
     'prefix': 'con'
     'body': """
             console.log($1);
+            $2
             """
 
 
@@ -328,6 +332,8 @@
             app.post('/${2:model}', ${3:model}Ctrl.create);
             app.put('/${2:model}/:id', ${3:model}Ctrl.update);
             app.delete('/${2:model}/:id', ${3:model}Ctrl.delete);
+
+            $4
             """
 
 
@@ -380,7 +386,7 @@
 
               // OTHER METHODS
               // ============================================================
-
+              $3
 
             };
             """
