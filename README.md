@@ -11,4 +11,4 @@ If you notice on the angular functions (ctrl, serv, dir) the angular module look
 ${2:angular.module("${1:app}")}...
 ```
 
-What this does is makes it easier for you to decide what kind of method you want to use when writing your functions. After you define the app name (which you can tab right through), it will heighlight that whole area of text, allowing you to leave it, remove it, or replace it. enjoy!
+What this does is makes it easier for you to decide what kind of layout you want to use when writing your functions. After you define the app name (which you can tab right through), it will heighlight that whole area of text, allowing you to leave it, remove it, or replace it. enjoy!
