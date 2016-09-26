@@ -26,9 +26,13 @@
 
   # ATOM PLUGIN SNIPPETS
   # ============================================================
-  "editor-fold":
-    "prefix": "// e"
-    "body": "// <editor-fold desc='$1'>\n// </editor-fold>"
+  "Function":
+    "prefix": "fun"
+    "body": """
+            function $1($2) {
+              $3
+            }
+            """
 
 
   # ANGULAR SNIPPETS
@@ -179,6 +183,30 @@
               $3
 
             });
+            """
+
+
+
+  'localStorageService':
+    'prefix': 'localServ'
+    'body': """
+            // INITILIZE SERVICE
+            // ============================================================
+            ${2:angular.module("${1:app}")}
+            	.service("${3:localStorageService}", function($http) {
+
+            		this.store = function(name, data) {
+            			localStorage.setItem(name, JSON.stringify(data));
+            			return 'saved';
+            		};
+
+            		this.get = function(name) {
+            			var item = localStorage.getItem(name);
+            			return JSON.parse(item);
+            		};
+
+            	});
+            $4
             """
 
 
@@ -548,14 +576,14 @@
                 .pipe(gulp.dest('./public'));
             });
             $2
-            // WATCH TASKS
+            // WATCH TASK
             // ============================================================
             gulp.task('watch', function() {
               gulp.watch(paths.jsSource, ['js']);
               gulp.watch(paths.sassSource, ['sass']);
             });
 
-            // RUN DEFAULT TASK - first thing to run when gulp is called
+            // DEFAULT TASK - first thing to run when gulp is called
             // ============================================================
             gulp.task('default', ['watch', 'js', 'sass']);
             """
