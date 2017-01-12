@@ -100,33 +100,33 @@
               this.get${4:Collection}s = function() {
                 return $http({
                   method: 'GET',
-                  url: '/${5:collection}'
+                  url: '/api/${5:collection}'
                 });
               };
               this.get${4:Collection} = function(id) {
                 return $http({
                   method: 'GET',
-                  url: '/${5:collection}?_id='+id
+                  url: '/api/${5:collection}?_id='+id
                 });
               };
               this.create${4:Collection} = function(${6:collection}) {
                 return $http({
                   method: 'POST',
-                  url: '/${5:collection}',
+                  url: '/api/${5:collection}',
                   data: ${6:collection}
                 });
               };
               this.edit${4:Collection} = function(id, ${6:collection}) {
                 return $http({
                   method: 'PUT',
-                  url: "/${5:collection}/" + id,
+                  url: "/api/${5:collection}/" + id,
                   data: ${6:collection}
                 });
               };
               this.delete${4:Collection} = function(id) {
                 return $http({
                   method: 'DELETE',
-                  url: '/${5:collection}/' + id
+                  url: '/api/${5:collection}/' + id
                 });
               };
 
