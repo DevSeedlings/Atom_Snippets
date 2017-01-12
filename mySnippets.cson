@@ -24,7 +24,7 @@
 # ============================================================
 '.source.js':
 
-  # ATOM PLUGIN SNIPPETS
+  # JAVASCRIPT SNIPPETS
   # ============================================================
   "Function":
     "prefix": "fun"
@@ -35,9 +35,28 @@
             """
 
 
+
+  'console.log':
+    'prefix': 'con'
+    'body': """
+            console.log('$1: ', $1);
+            """
+
+
+
+  'Reverse For Loop':
+    'prefix': 'rfor'
+    'body': """
+            for (var i = ${1:array}.length - 1; i >= 0; i--) {
+
+            }
+            """
+
+
+
   # ANGULAR SNIPPETS
   # ============================================================
-  'app':
+  'Angular App File':
     'prefix': 'app'
     'body': """
             // INITILIZE APP
@@ -78,15 +97,16 @@
 
               // CRUD FUNCTIONS
               // ============================================================
-              this.get${4:Collection} = function(id) {
-                var query = "";
-                if (id) query = '?_id=' + id;
+              this.get${4:Collection}s = function() {
                 return $http({
                   method: 'GET',
-                  url: '/${5:collection}' + query
-                }).then(function(response) {
-                  if (response.data.length < 2) return response.data[0];
-                  return response.data;
+                  url: '/${5:collection}'
+                });
+              };
+              this.get${4:Collection} = function(id) {
+                return $http({
+                  method: 'GET',
+                  url: '/${5:collection}?_id='+id
                 });
               };
               this.create${4:Collection} = function(${6:collection}) {
@@ -94,8 +114,6 @@
                   method: 'POST',
                   url: '/${5:collection}',
                   data: ${6:collection}
-                }).then(function(response) {
-                  return response;
                 });
               };
               this.edit${4:Collection} = function(id, ${6:collection}) {
@@ -103,16 +121,12 @@
                   method: 'PUT',
                   url: "/${5:collection}/" + id,
                   data: ${6:collection}
-                }).then(function(response) {
-                  return response;
                 });
               };
               this.delete${4:Collection} = function(id) {
                 return $http({
                   method: 'DELETE',
                   url: '/${5:collection}/' + id
-                }).then(function(response) {
-                  return response;
                 });
               };
 
@@ -137,44 +151,34 @@
               this.login = function(user) {
                 return $http({
                   method: 'post',
-                  url: '/login',
+                  url: '/api/login',
                   data: user
-                }).then(function(response) {
-                  return response;
                 });
               };
               this.logout = function() {
                 return $http({
                   method: 'get',
-                  url: '/logout'
-                }).then(function(response) {
-                  return response;
+                  url: '/api/logout'
                 });
               };
               this.getCurrentUser = function() {
                 return $http({
                   method: 'GET',
-                  url: '/me'
-                }).then(function(response) {
-                  return response;
+                  url: '/api/me'
                 });
               };
               this.registerUser = function(user) {
                 return $http({
                   method: 'POST',
-                  url: '/register',
+                  url: '/api/register',
                   data: user
-                }).then(function(response) {
-                  return response;
                 });
               };
               this.editUser = function(id, user) {
                 return $http({
                   method: 'PUT',
-                  url: "/user/" + id,
+                  url: "/api/user/" + id,
                   data: user
-                }).then(function(response) {
-                  return response;
                 });
               };
 
@@ -270,15 +274,6 @@
 
 
 
-  'console.log':
-    'prefix': 'con'
-    'body': """
-            console.log($1);
-            $2
-            """
-
-
-
   '.then':
     'prefix': 'then'
     'body': """
@@ -299,8 +294,179 @@
 
 
 
+  'Endpoints':
+    'prefix': 'end'
+    'body': """
+            // ${1:MODEL} ENDPOINTS
+            app.get('/api/${2:model}', ${3:model}Ctrl.read);
+            app.post('/api/${2:model}', ${3:model}Ctrl.create);
+            app.put('/api/${2:model}/:id', ${3:model}Ctrl.update);
+            app.delete('/api/${2:model}/:id', ${3:model}Ctrl.delete);
+
+            $4
+            """
+
+
+
+  # SQL snippits
+  # ============================================================
+  "DataBase":
+    "prefix": "db"
+    "body": """
+            db.${1:queryName}([$2], function(err, ${3:DataHere}){
+              if (err) {
+                console.log('${1:queryName}: ', err);
+                return res.status(500).${4:send}(err);
+              }
+
+              res.status(200).${4:send}(${3:DataHere});
+            });
+            """
+
+
+
+  'Server Controller':
+    'prefix': 'pctrl'
+    'body': """
+            // REQUIRE DEPENDENCIES
+            // ============================================================
+            var app = require('./../index);
+            var db = app.get('db');
+
+            // EXPORT METHODS
+            // ============================================================
+            module.exports = {
+
+              // CRUD METHODS
+              // ============================================================
+              read: function(req, res) {
+                db.${1:table}_read([$2], function(err, ${1:table}){
+                  if (err) {
+                    console.log('${1:table}_read: ', err);
+                    return res.status(500).${3:send}(err);
+                  }
+
+                  res.status(200).${3:send}(${1:table});
+                });
+              },
+              create: function(req, res) {
+                db.${1:table}_insert([$2], function(err, ${1:table}){
+                  if (err) {
+                    console.log('${1:table}_insert: ', err);
+                    return res.status(500).${3:send}(err);
+                  }
+
+                  res.status(200).${3:send}(${1:table});
+                });
+              },
+              update: function(req, res) {
+                db.${1:table}_update([$2], function(err, ${1:table}){
+                  if (err) {
+                    console.log('${1:table}_update: ', err);
+                    return res.status(500).${3:send}(err);
+                  }
+
+                  res.status(200).${3:send}(${1:table});
+                });
+              },
+              delete: function(req, res) {
+                db.${1:table}_remove([$2], function(err, ${1:table}){
+                  if (err) {
+                    console.log('${1:table}_remove: ', err);
+                    return res.status(500).${3:send}(err);
+                  }
+
+                  res.status(200).${3:send}(${1:table});
+                });
+              }
+
+              // OTHER METHODS
+              // ============================================================
+              $3
+
+            };
+            """
+
+
+
   'Server':
-    'prefix': 'server'
+    'prefix': 'pserver'
+    'body': """
+            // REQUIRE DEPENDENCIES
+            // ============================================================
+            var express = require('express');
+            var bodyParser = require('body-parser');
+            var session = require('express-session');
+            var massive = require('massive');
+
+            // CONFIG
+            // ============================================================
+            var config = require('./config');
+
+            // INITILIZE APP
+            // ============================================================
+            var app = module.exports = express();
+
+            // INITILIZE DEPENDENCIES
+            // ============================================================
+            app.use(express.static(__dirname + './../public'));
+            app.use(bodyParser.json());
+
+            // MASSIVE SETUP
+            // ============================================================
+            var massiveUri = ${1:config.MASSIVE_URI};
+            var massiveServer = massive.connectSync({
+            	connectionString: massiveUri
+            });
+            app.set('db', massiveServer);
+            var db = app.get('db');
+
+            // CONTROLLERS
+            // ============================================================
+            var ${2:table}Controller = './controllers/${2:table}Controller';
+
+            // ENDPOINTS
+            // ============================================================
+            // ${3:TABLE} ENDPOINTS
+            app.get('/api/${4:table}', ${2:table}Controller.read);
+            app.post('/api/${4:table}', ${2:table}Controller.create);
+            app.put('/api/${4:table}/:id', ${2:table}Controller.update);
+            app.delete('/api/${4:table}/:id', ${2:table}Controller.delete);
+
+            // LISTEN
+            // ============================================================
+            var port = ${4:config.PORT};
+            app.listen(port, function() {
+              console.log('listening on port ', port);
+            });
+            """
+
+
+
+  # Mongo snippits
+  # ============================================================
+  'Schema':
+    'prefix': 'mschema'
+    'body': """
+            // REQUIRE DEPENDENCIES
+            // ============================================================
+            var mongoose = require('mongoose');
+
+            // DEFINE SCHEMA
+            // ============================================================
+            var ${1:model}Schema = mongoose.Schema({
+              $3
+            });
+
+            // EXPORT SCHEMA
+            // ============================================================
+            module.exports = mongoose.model('${2:Model}', ${1:model}Schema);
+            """
+
+
+
+  'Server':
+    'prefix': 'mserver'
     'body': """
             // REQUIRE DEPENDENCIES
             // ============================================================
@@ -325,10 +491,10 @@
             // ENDPOINTS
             // ============================================================
             // ${2:MODEL} ENDPOINTS
-            app.get('/${3:model}', ${1:model}Ctrl.read);
-            app.post('/${3:model}', ${1:model}Ctrl.create);
-            app.put('/${3:model}/:id', ${1:model}Ctrl.update);
-            app.delete('/${3:model}/:id', ${1:model}Ctrl.delete);
+            app.get('/api/${3:model}', ${1:model}Ctrl.read);
+            app.post('/api/${3:model}', ${1:model}Ctrl.create);
+            app.put('/api/${3:model}/:id', ${1:model}Ctrl.update);
+            app.delete('/api/${3:model}/:id', ${1:model}Ctrl.delete);
 
             // VARIABLES
             // ============================================================
@@ -341,7 +507,7 @@
             mongoose.connect(mongoURI);
             mongoose.connection.once('open', function() {
               console.log('Connected to mongo at: ', mongoURI);
-            });
+              });
 
             // LISTEN
             // ============================================================
@@ -352,22 +518,8 @@
 
 
 
-  'Endpoints':
-    'prefix': 'end'
-    'body': """
-            // ${1:MODEL} ENDPOINTS
-            app.get('/${2:model}', ${3:model}Ctrl.read);
-            app.post('/${2:model}', ${3:model}Ctrl.create);
-            app.put('/${2:model}/:id', ${3:model}Ctrl.update);
-            app.delete('/${2:model}/:id', ${3:model}Ctrl.delete);
-
-            $4
-            """
-
-
-
   'Server Controller':
-    'prefix': 'sctrl'
+    'prefix': 'mctrl'
     'body': """
             // REQUIRE DEPENDENCIES
             // ============================================================
@@ -421,43 +573,31 @@
 
 
 
-  'Schema':
-    'prefix': 'schema'
-    'body': """
-            // REQUIRE DEPENDENCIES
-            // ============================================================
-            var mongoose = require('mongoose');
-
-            // DEFINE SCHEMA
-            // ============================================================
-            var ${1:model}Schema = mongoose.Schema({
-              $3
-            });
-
-            // EXPORT SCHEMA
-            // ============================================================
-            module.exports = mongoose.model('${2:Model}', ${1:model}Schema);
-            """
-
-
   # REACT SNIPPETS
   # ============================================================
-  'React':
-    'prefix': 'react'
+  'React Component':
+    'prefix': 'rcomp'
     'body': """
-            import React, {Component} from 'react';
-            export default class App extends Component {
-              constructor(props){
-                super(props);
-                this.state = {};
-              }
+            import React from 'react';
+            import {connect} from 'react-redux';
+
+            class ${1:App} extends Component {
               render() {
                 return(
                   <div>
+
                   </div>
                 );
               }
             }
+
+            var connectPrefrences = function(state) {
+              return {
+                ${2:item}: state.${2:item}
+              }
+            };
+
+            export default connect(connectPrefrences)(${1:App});
             """
 
 
@@ -472,70 +612,6 @@
 
 
 
-  'Input':
-    'prefix': 'input'
-    'body': """
-            <input className="$1" type="${2:text}" placeholder="$3" onChange={ (event) => this.${1:functionName}(event.target.value)} />
-            $4
-            """
-
-
-
-  'Button':
-    'prefix': 'button'
-    'body': """
-            <button className="$1" type="button" onClick={}>$2</button>
-            $3
-            """
-
-
-
-  'Header':
-    'prefix': 'h1'
-    'body': """
-            <h${1:1} className="$2">$3</h${1:1}>
-            $4
-            """
-
-
-
-  'Link':
-    'prefix': 'a'
-    'body': """
-            <a href="$1">$2</a>
-            $3
-            """
-
-
-
-  'Image':
-    'prefix': 'img'
-    'body': """
-            <img src="$1">$2</img>
-            $3
-            """
-
-
-
-  'Peragraph':
-    'prefix': 'p'
-    'body': """
-            <p className="$1">$2</p>
-            $3
-            """
-
-
-
-  'Select':
-    'prefix': 'select'
-    'body': """
-            <select onChange={ (event) => this.${1:functionName}(event.target.value)}>
-              <option value="$2">$3</option>
-            </select>
-            $4
-            """
-
-
   # GULP SNIPPET
   # ============================================================
   'gulpfile':
@@ -547,61 +623,55 @@
             var concat = require('gulp-concat');
             var annotate = require('gulp-ng-annotate');
             var uglify = require('gulp-uglify');
-            var watch = require('gulp-watch');
-            var sass = require('gulp-sass');
-            var babel = require('gulp-babel');
+            var sass = require('gulp-sass')
 
             // DECLARE FILE PATHS
             // ============================================================
             var paths = {
               jsSource: ['./public/app/**/*.js', '!/public/bundle.js'],
-              sassSource: ['./public/${1:app}/**/*.sass']
+              sassSource: ['./public/${1:app}/**/*.sass'],
+              indexSource: ['./public/index.html']
             };
 
             // DEFINE TASKS
             // ============================================================
             gulp.task('js', function() {
               return gulp.src(paths.jsSource)
-              //.pipe(babel()) //Uncomment if using ES6
               .pipe(concat('bundle.js'))
               .pipe(annotate())
               //.pipe(uglify()) //Uncomment when code is production ready
-              .pipe(gulp.dest('./public'));
+              .pipe(gulp.dest('./${2:dist}'));
             });
 
-            gulp.task('sass', function () {
+            gulp.task('sass', function() {
               return gulp.src(paths.sassSource)
                 .pipe(sass())
-                .pipe(concat('style.css'))
-                .pipe(gulp.dest('./public'));
+                .pipe(concat('bundle.css'))
+                .pipe(gulp.dest('./${2:dist}'));
             });
-            $2
+
+            gulp.task('index', function() {
+              return gulp.src(paths.indexSource)
+                .pipe(gulp.dest('./${2:dist}'));
+            })
+            $3
             // WATCH TASK
             // ============================================================
             gulp.task('watch', function() {
               gulp.watch(paths.jsSource, ['js']);
               gulp.watch(paths.sassSource, ['sass']);
+              gulp.watch(paths.indexSource, ['index']);
             });
 
             // DEFAULT TASK - first thing to run when gulp is called
             // ============================================================
-            gulp.task('default', ['watch', 'js', 'sass']);
+            gulp.task('default', ['watch', 'js', 'sass', 'index']);
             """
 
 
 # HTML SNIPPETS
 # ============================================================
 '.text.html, .text.html .meta.scope.between-tag-pair, .text.html .punctuation.tag.begin':
-
-
-  'ng-view':
-    'prefix': 'ng-view'
-    'body': """
-            <!-- VIEW -->
-            <ng-view></ng-view>
-            """
-
-
 
   'modal template':
     'prefix': 'modal'
@@ -614,6 +684,36 @@
             """
 
 
+
+  'Angular Index':
+    'prefix': 'aindex'
+    'body': """
+            <!DOCTYPE html>
+            <html ng-app="${1:app}">
+
+              <head>
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+                <title>$2</title>
+                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+                <link rel="stylesheet" href="styles/normalize.css">
+                <link rel="stylesheet" href="./bundle.css">
+              </head>
+
+              <body>
+
+                <ui-view></ui-view>
+
+                <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.1/angular-ui-router.js"></script>
+                <script src="./bundle.js"></script>
+              </body>
+
+            </html>
+            """
+
+
+
 # CSS SNIPPETS
 # ============================================================
 '.source.css':
@@ -624,10 +724,10 @@
             // ============================================================
             .overlay {
               color: black;
-              position: fixed
-              top: 50%
-              left: 50%
-              transform: translate(-50%, -50%)
+              position: fixed;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
               padding: 25px;
               background-color: #ffffff;
               z-index: 100;
@@ -650,4 +750,42 @@
               height: 100%;
               z-index: 99;
             }
+            """
+
+
+
+# CSS SNIPPETS
+# ============================================================
+'.source.sass':
+  'modal classes':
+    'prefix': 'modal'
+    'body': """
+            // MODAL OVERLAY
+            // ============================================================
+            .overlay
+              color: black
+              position: fixed
+              top: 50%
+              left: 50%
+              transform: translate(-50%, -50%)
+              padding: 25px
+              background-color: #ffffff
+              z-index: 100
+              overflow: auto
+              border-radius: 3px
+              border: 1px solid #C0C3C5
+
+            // MODAL FADE
+            // ============================================================
+            .fade
+              position: fixed
+              left: 0%
+              top: 0%
+              background-color: black
+              -moz-opacity: 0.7
+              opacity: .70
+              filter: alpha(opacity=70)
+              width: 100%
+              height: 100%
+              z-index: 99
             """
