@@ -686,7 +686,7 @@
 
 
   'Angular Index':
-    'prefix': 'aindex'
+    'prefix': 'ahtml'
     'body': """
             <!DOCTYPE html>
             <html ng-app="${1:app}">
