@@ -575,13 +575,18 @@
 
   # REACT SNIPPETS
   # ============================================================
-  'React Component':
-    'prefix': 'rcomp'
+  'React Dumb Component':
+    'prefix': 'dcomp'
     'body': """
             import React from 'react';
-            import {connect} from 'react-redux';
 
-            class ${1:App} extends Component {
+            class ${1:Comp} extends React.Component {
+              constructor(props) {
+                super(props);
+
+                this.state = {};
+              }
+
               render() {
                 return(
                   <div>
@@ -591,13 +596,89 @@
               }
             }
 
-            var connectPrefrences = function(state) {
+            export default ${1:Comp};
+            """
+
+
+
+  'React Smart Component':
+    'prefix': 'scomp'
+    'body': """
+            import React from 'react';
+            import {connect} from 'react-redux';
+            import {bindActionCreators} from 'redux';
+
+            import {${1:action}} from '${2:./../actions/Actions}';
+
+            class ${3:Comp} extends React.Component {
+              constructor(props) {
+                super(props);
+
+                this.state = {};
+
+                this.${1:action} = this.${1:action}.bind(this);
+              }
+
+              render() {
+                return(
+                  <div>
+
+                  </div>
+                );
+              }
+            }
+
+            var mapStateToProps = function(state) {
               return {
-                ${2:item}: state.${2:item}
+                ${4:reducer}: state.${4:reducer}
               }
             };
 
-            export default connect(connectPrefrences)(${1:App});
+            var mapDispatchToProps = function (dispatch) {
+              return bindActionCreators({
+                  ${1:action}: ${1:action},
+                }, dispatch);
+            }
+
+            export default connect(mapStateToProps)(${3:Comp});
+            """
+
+
+
+  'Reducer':
+    'prefix': 'reducer'
+    'body': """
+            const ${1:ACTION_TYPE} = "list/${1:ACTION_TYPE}";
+
+            const initialState = {
+              ${2:${3:Example}: []}
+            };
+
+            export default function reducer(state = initialState, action) {
+              console.log(action);
+
+              switch (action.type) {
+                case ${1:ACTION_TYPE}:
+                  return {
+                    ${2:${3:Example}: [...state.${3:Example}]}
+                  };
+
+                default:
+                  return initialState;
+              }
+
+              return state;
+            }
+            """
+
+
+
+  'Action':
+    'prefix': 'action'
+    'body': """
+            export function ${1:action}(payload) {
+              return {type: ${2:ACTION_TYPE}, payload};
+            }
             """
 
 
