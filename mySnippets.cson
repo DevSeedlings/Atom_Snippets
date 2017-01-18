@@ -615,8 +615,6 @@
                 super(props);
 
                 this.state = {};
-
-                this.${1:action} = this.${1:action}.bind(this);
               }
 
               render() {
