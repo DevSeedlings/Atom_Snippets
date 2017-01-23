@@ -423,7 +423,7 @@
 
             // CONTROLLERS
             // ============================================================
-            var ${2:table}Controller = './controllers/${2:table}Controller';
+            var ${2:table}Controller = require('./controllers/${2:table}Controller');
 
             // ENDPOINTS
             // ============================================================
