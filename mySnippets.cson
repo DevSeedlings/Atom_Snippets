@@ -325,7 +325,7 @@
 
 
 
-  'Server Controller':
+  'Postgres Server Controller':
     'prefix': 'pctrl'
     'body': """
             // REQUIRE DEPENDENCIES
@@ -389,7 +389,7 @@
 
 
 
-  'Server':
+  'Postgres Server':
     'prefix': 'pserver'
     'body': """
             // REQUIRE DEPENDENCIES
