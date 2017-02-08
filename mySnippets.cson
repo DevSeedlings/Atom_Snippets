@@ -445,7 +445,7 @@
 
   # Mongo snippits
   # ============================================================
-  'Schema':
+  'Mongo Schema':
     'prefix': 'mschema'
     'body': """
             // REQUIRE DEPENDENCIES
@@ -465,7 +465,7 @@
 
 
 
-  'Server':
+  'Mongo Server':
     'prefix': 'mserver'
     'body': """
             // REQUIRE DEPENDENCIES
@@ -518,7 +518,7 @@
 
 
 
-  'Server Controller':
+  'Mongo Server Controller':
     'prefix': 'mctrl'
     'body': """
             // REQUIRE DEPENDENCIES
